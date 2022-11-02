@@ -1,5 +1,9 @@
 package com.example.tools_jwt.entity;
 
+import io.swagger.annotations.ApiModelProperty;
+
+import java.io.Serializable;
+
 /**
  * Project name(项目名称)：jwt_spring_boot_starter
  * Package(包名): com.example.tools_jwt.entity
@@ -12,8 +16,78 @@ package com.example.tools_jwt.entity;
  * Version(版本): 1.0
  * Description(描述)： 无
  */
-
-public class Token
+public class Token implements Serializable
 {
+    private static final long serialVersionUID = -8482946147572784305L;
 
+    /**
+     * token
+     */
+    @ApiModelProperty(value = "token")
+    private String token;
+    /**
+     * 有效时间：单位：秒
+     */
+    @ApiModelProperty(value = "token的有效期")
+    private Integer expire;
+
+    /**
+     * Instantiates a new Token.
+     */
+    public Token()
+    {
+
+    }
+
+    /**
+     * Instantiates a new Token.
+     *
+     * @param token  the token
+     * @param expire the expire
+     */
+    public Token(String token, Integer expire)
+    {
+        this.token = token;
+        this.expire = expire;
+    }
+
+    /**
+     * Gets token.
+     *
+     * @return the token
+     */
+    public String getToken()
+    {
+        return token;
+    }
+
+    /**
+     * Sets token.
+     *
+     * @param token the token
+     */
+    public void setToken(String token)
+    {
+        this.token = token;
+    }
+
+    /**
+     * Gets expire.
+     *
+     * @return the expire
+     */
+    public Integer getExpire()
+    {
+        return expire;
+    }
+
+    /**
+     * Sets expire.
+     *
+     * @param expire the expire
+     */
+    public void setExpire(Integer expire)
+    {
+        this.expire = expire;
+    }
 }
