@@ -1,5 +1,10 @@
 package com.example.tools_jwt.utils;
 
+import com.example.tools_jwt.constants.BaseContextConstants;
+import com.example.tools_jwt.entity.JwtUserInfo;
+import com.example.tools_jwt.entity.Token;
+import com.example.tools_jwt.exception.BizException;
+import com.example.tools_jwt.exception.ExceptionCode;
 import io.jsonwebtoken.*;
 
 import java.io.IOException;
@@ -14,6 +19,8 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Project name(项目名称)：jwt_spring_boot_starter
@@ -32,14 +39,16 @@ public class JwtHelper
 {
     private static final RsaKeyHelper RSA_KEY_HELPER = new RsaKeyHelper();
 
+    private static final Logger log = LoggerFactory.getLogger(JwtHelper.class);
+
     /**
-     * 生成用户token
+     * 生成用户令牌
      *
-     * @param jwtInfo
-     * @param priKeyPath
-     * @param expire
-     * @return
-     * @throws BizException
+     * @param jwtInfo    jwt信息
+     * @param priKeyPath 私钥路径
+     * @param expire     到期时间
+     * @return {@link Token}
+     * @throws BizException 业务异常
      */
     public static Token generateUserToken(JwtUserInfo jwtInfo, String priKeyPath, int expire) throws BizException
     {
@@ -53,13 +62,14 @@ public class JwtHelper
         return generateToken(jwtBuilder, priKeyPath, expire);
     }
 
+
     /**
      * 获取token中的用户信息
      *
-     * @param token      token
+     * @param token      令牌
      * @param pubKeyPath 公钥路径
-     * @return
-     * @throws Exception
+     * @return {@link JwtUserInfo}
+     * @throws BizException 业务异常
      */
     public static JwtUserInfo getJwtFromToken(String token, String pubKeyPath) throws BizException
     {
@@ -68,7 +78,6 @@ public class JwtHelper
         String strUserId = body.getSubject();
         String account = StrHelper.getObjectValue(body.get(BaseContextConstants.JWT_KEY_ACCOUNT));
         String name = StrHelper.getObjectValue(body.get(BaseContextConstants.JWT_KEY_NAME));
-
         String strOrgId = StrHelper.getObjectValue(body.get(BaseContextConstants.JWT_KEY_ORG_ID));
         String strDepartmentId = StrHelper.getObjectValue(body.get(BaseContextConstants.JWT_KEY_STATION_ID));
         Long userId = NumberHelper.longValueOf0(strUserId);
@@ -77,14 +86,15 @@ public class JwtHelper
         return new JwtUserInfo(userId, account, name, orgId, departmentId);
     }
 
+
     /**
      * 生成token
      *
-     * @param builder
-     * @param priKeyPath
-     * @param expire
-     * @return
-     * @throws BizException
+     * @param builder    构建器
+     * @param priKeyPath 私钥路径
+     * @param expire     到期时间
+     * @return {@link Token}
+     * @throws BizException 业务异常
      */
     protected static Token generateToken(JwtBuilder builder, String priKeyPath, int expire) throws BizException
     {
@@ -105,13 +115,14 @@ public class JwtHelper
         }
     }
 
+
     /**
      * 公钥解析token
      *
-     * @param token
+     * @param token      令牌
      * @param pubKeyPath 公钥路径
-     * @return
-     * @throws Exception
+     * @return {@link Jws}<{@link Claims}>
+     * @throws BizException 业务异常
      */
     private static Jws<Claims> parserToken(String token, String pubKeyPath) throws BizException
     {
