@@ -13,4 +13,19 @@ import java.lang.annotation.*;
 public @interface EnableAuthServer
 {
 
+/*
+
+配置文件示例：
+
+
+authentication:
+  user:
+    # 过期时间
+    expire: 1800
+    # 私钥位置
+    prikey: keys/pri.key
+    # 公钥位置
+    pubKey: keys/pub.key
+
+ */
 }
